@@ -32,8 +32,7 @@ app.get '/', (req,res)->
 
 app.post '/save', (req,res)->
     fn = path.join(__dirname, 'data.json')
-    err, data <- josnfile.readFile fn, do
-        encoding: 'utf8'
+    err, data <- josnfile.readFile fn
     if err
         res.end()
         return
