@@ -1,5 +1,6 @@
 #!/usr/bin/lsc
 express = require 'express'
+path = require 'path'
 cookieParser = require 'cookie-parser'
 jsonfile = require 'jsonfile'
 #nunjucks = require 'nunjucks'
@@ -17,6 +18,7 @@ app.use express.urlencoded do
 app.use express.json()
 
 app.get '/', (req,res)->
+    console.log '/'
     err, data <- jsonfile.readFile 'data.json'
     if err
         console.log 'unable to load json data'
@@ -31,6 +33,9 @@ app.get '/', (req,res)->
         pathname: parseUrl(req).pathname
 
 app.post '/save', (req,res)->
+    console.log '/save'
+    console.log req.body
+
     fn = path.join(__dirname, 'data.json')
     err, data <- josnfile.readFile fn
     if err
@@ -41,15 +46,21 @@ app.post '/save', (req,res)->
 
     err <- json.writeFile fn, data, {spaces:2}
 
+    console.log data
+
     res.json do
         data: data
 
 app.post '/new', (req,res)->
+    console.log '/new'
+    console.log req.body
+
     templateName = req.body.templateName;
-    partialPath = path.join(__dirname, "views/partials/" + templateName + ".pug")
-    startingDataPath = path.join(__dirname, "views/partials/" + templateName + ".json")
+    partialPath = path.join(__dirname, "views/" + templateName + ".pug")
+    startingDataPath = path.join(__dirname, "views/" + templateName + ".json")
     err, startingData <- jsonfile.readFile startingDataPath
     htmlString = pug.renderFile partialPath, startingData
+    console.log {htmlString}
 
     res.json({htmlString});
 

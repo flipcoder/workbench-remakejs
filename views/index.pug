@@ -1,7 +1,12 @@
 html
   head
   body
-    p This is a test.
-    div.app(data-o-type="object" data-o-key-name="")
+    div.app(data-o-save-deep="all" data-o-type="object")
+    h1 Notes
+    div.todos(data-o-key='notes' data-o-type='list')
+      each note in data.notes
+        include note
+    button(data-i-new='note') New
+    br
     script(src='index.js')
 
