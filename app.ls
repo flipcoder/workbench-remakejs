@@ -26,7 +26,6 @@ app.get '/', (req,res)->
         return
 
     res.send pug.renderFile 'views/index.pug', do
-        title: 'index'
         data: data
         params: req.params
         query: req.query
