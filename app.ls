@@ -47,10 +47,10 @@ app.post '/save', (req,res)->
 
 app.post '/new', (req,res)->
     templateName = req.body.templateName;
-    partialPath = path.join(__dirname, "../views/partials/" + templateName + "/index.pug")
-    #startingDataPath = path.join(__dirname, "../templates/partials/" + templateName + "/data.json")
-    #startingData <- jsonfile.readFile startingDataPath
-    htmlString = pug.renderFile partialPath, {}
+    partialPath = path.join(__dirname, "views/partials/" + templateName + ".pug")
+    startingDataPath = path.join(__dirname, "templates/partials/" + templateName + ".json")
+    startingData <- jsonfile.readFile startingDataPath
+    htmlString = pug.renderFile partialPath, startingData
 
     res.json({htmlString});
 
