@@ -1,0 +1,24 @@
+{
+  "name": "todo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "scripts": {
+    "start": "./node_modules/livescript/bin/lsc ./app.ls"
+  },
+  "author": "flipcoder",
+  "dependencies": {
+    "remakejs": "*",
+    "cookie-parser": "*",
+    "express": "*",
+    "grunt-browserify": "*",
+    "grunt-contrib-pug": "^2.0.0",
+    "grunt-contrib-stylus": "*",
+    "grunt-livescript": "*",
+    "livescript": "https://github.com/gkz/LiveScript#bc1c188",
+    "pug": "*"
+  },
+  "engines": {
+    "yarn": ">= 1.0.0"
+  }
+}

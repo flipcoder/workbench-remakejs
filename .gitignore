@@ -1,0 +1,7 @@
+node_modules/
+public/css/
+public/index.js
+public/lib/
+Gruntfile.js
+client/index.js
+yarn-error.log
