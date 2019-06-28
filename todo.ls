@@ -9,6 +9,7 @@ export npm =
         jsonfile: '*'
         parseurl: '*'
         remakejs: '*'
+        livescript: '*'
         'deep-extend': '*'
 
 export views =
