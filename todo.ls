@@ -27,10 +27,8 @@ export views =
             script(src="client.js")
     ''',
     'note.pug': '''
-        br
         div.note(data-i-editable-with-remove="text(text-single-line)" data-o-type="object" data-o-key-text=note.text data-w-key-text="innerText")
           | #{note.text}
-        br 
     '''
 
 export client = ->
@@ -41,12 +39,13 @@ export client = ->
 export server = (app)->
 
     defaults =
-        notes:
+        note:
             text: 'New Note'
 
     jsonfile = require 'jsonfile'
     deepExtend = require 'deep-extend'
     parseUrl = require 'parseurl';
+    path = require 'path'
     pug = require 'pug'
 
     app.get '/', (req,res)->
@@ -82,13 +81,14 @@ export server = (app)->
 
     app.post '/new', (req,res)->
         console.log '/new'
+        console.log req
         console.log req.body
 
-        templateName = req.body['templateName']
+        templateName = req.body.templateName
         partialPath = path.join(__dirname, "views/" + templateName + ".pug")
-        startingDataPath = path.join(__dirname, "views/" + templateName + ".json")
-        err, startingData <- jsonfile.readFile startingDataPath
-        htmlString = pug.renderFile partialPath, startingData
+        def = {}
+        def[templateName] = defaults[templateName]
+        htmlString = pug.renderFile partialPath, def
         console.log htmlString
 
         res.json({htmlString});
