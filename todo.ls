@@ -8,7 +8,7 @@ export npm =
     dependencies:
         jsonfile: '*'
         parseurl: '*'
-        remake: '*'
+        remakejs: '*'
         'deep-extend': '*'
 
 export views =
