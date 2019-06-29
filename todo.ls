@@ -18,7 +18,7 @@ export views =
         html
           head
           body
-            div.app(data-o-save-deep="all" data-o-type="object")
+            div.app(data-o-save-deep="defaultSave" data-o-type="object")
             h1 Notes
             button(data-i-new="note .notes") New
             div.notes(data-o-key="notes" data-o-type="list")
