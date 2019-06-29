@@ -18,7 +18,7 @@ export views =
         html
           head
           body
-            div.app(data-o-save-deep="defaultSave" data-o-type="object")
+            div.app(data-o-save-deep="all" data-o-type="object")
             h1 Notes
             button(data-i-new="note .notes") New
             div.notes(data-o-key="notes" data-o-type="list")
@@ -69,13 +69,17 @@ export server = (app)->
         #console.log req.body
 
         fn = path.join(__dirname, 'data.json')
-        err, data <- josnfile.readFile fn
+        err, data <- jsonfile.readFile fn
         if err
             console.log 'unable to load json data'
             res.end()
             return
         data = deepExtend data, req.body.data
-        err <- json.writeFile fn, data, {spaces:4}
+        err <- jsonfile.writeFile fn, data, {spaces:4}
+        if err
+            console.log 'unable to write json data'
+            res.end()
+            return
 
         console.log data
 
