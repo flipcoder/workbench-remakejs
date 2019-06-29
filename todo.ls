@@ -51,7 +51,8 @@ export server = (app)->
 
     app.get '/', (req,res)->
         console.log '/'
-        err, data <- jsonfile.readFile 'data.json'
+        fn = path.join(__dirname, 'data.json')
+        err, data <- jsonfile.readFile fn
         if err
             console.log 'unable to load json data'
             res.end()
@@ -65,11 +66,12 @@ export server = (app)->
 
     app.post '/save', (req,res)->
         console.log '/save'
-        console.log req.body
+        #console.log req.body
 
         fn = path.join(__dirname, 'data.json')
         err, data <- josnfile.readFile fn
         if err
+            console.log 'unable to load json data'
             res.end()
             return
         data = deepExtend data, req.body.data
@@ -82,15 +84,14 @@ export server = (app)->
 
     app.post '/new', (req,res)->
         console.log '/new'
-        console.log req
-        console.log req.body
+        #console.log req.body
 
         templateName = req.body.templateName
         partialPath = path.join(__dirname, "views/" + templateName + ".pug")
         def = {}
         def[templateName] = defaults[templateName]
         htmlString = pug.renderFile partialPath, def
-        console.log htmlString
+        #console.log htmlString
 
         res.json({htmlString});
 
