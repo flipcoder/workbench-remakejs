@@ -58,7 +58,7 @@ export server = (app)->
             res.end()
             return
 
-        res.send pug.renderFile 'views/index.pug', do
+        res.send pug.renderFile path.join(__dirname,'views/index.pug'), do
             data: data
             params: req.params
             query: req.query
