@@ -19,13 +19,13 @@ export views =
           head
           body
             div.app(data-o-save-deep="defaultSave" data-o-type="object")
-            h1 Notes
-            button(data-i-new="note .notes") New
-            div.notes(data-o-key="notes" data-o-type="list")
-              each note in data.notes
-                include note
-            br
-            script(src="client.js")
+              h1 Notes
+              button(data-i-new="note .notes") New
+              div.notes(data-o-key="notes" data-o-type="list")
+                each note in data.notes
+                  include note
+              br
+              script(src="client.js")
     ''',
     'note.pug': '''
         div.note(data-i-editable-with-remove="text(text-single-line)" data-o-type="object" data-o-key-text=note.text data-w-key-text="innerText")
