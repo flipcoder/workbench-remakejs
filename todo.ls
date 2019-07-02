@@ -10,32 +10,32 @@ export npm =
         parseurl: '*'
         remakejs: '*'
         livescript: '*'
+        uuid: '*'
         'deep-extend': '*'
 
 export views =
     'index.pug': '''
         doctype html
         html
-          head
-          body
-            div.app(data-o-save-deep="defaultSave" data-o-type="object")
-              h1 Notes
-              button(data-i-new="note .notes") New
-              div.notes(data-o-key="notes" data-o-type="list")
-                each note in data.notes
-                  include note
-              br
-              script(src="client.js")
+            head
+            body
+                div.app(data-o-save-deep="defaultSave" data-o-type="object")
+                    h1 Notes
+                    button(data-i-new="note .notes") New
+                    div.notes(data-o-key="notes" data-o-type="list")
+                        each note in data.notes
+                            include note
+                    br
+                script(src="client.js")
     ''',
     'note.pug': '''
-        div.note(data-i-editable-with-remove="text(text-single-line)" data-o-type="object" data-o-key-text=note.text data-w-key-text="innerText")
-          | #{note.text}
+        div.note(data-i-editable-with-remove="text(text-single-line)" data-o-type="object" data-o-key-text=note.text data-id=note.id data-w-key-text="innerText")
+            | #{note.text}
     '''
 
 export client = ->
     remake = require('remakejs/dist/bundle.cjs.js')
     remake.init()
-    return
 
 export server = (app)->
 
@@ -48,6 +48,7 @@ export server = (app)->
     parseUrl = require 'parseurl';
     path = require 'path'
     pug = require 'pug'
+    uuid = require 'uuid/v4'
 
     app.get '/', (req,res)->
         console.log '/'
@@ -94,6 +95,8 @@ export server = (app)->
         partialPath = path.join(__dirname, "views/" + templateName + ".pug")
         def = {}
         def[templateName] = defaults[templateName]
+        def[templateName]['id'] = uuid()
+        console.log def
         htmlString = pug.renderFile partialPath, def
         #console.log htmlString
 
