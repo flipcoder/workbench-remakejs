@@ -11,6 +11,7 @@ export npm =
         remakejs: '*'
         livescript: '*'
         uuid: '*'
+        'connect-timeout': '*'
         'deep-extend': '*'
 
 export views =
@@ -49,6 +50,13 @@ export server = (app)->
     path = require 'path'
     pug = require 'pug'
     uuid = require 'uuid/v4'
+    #websocket = require 'websocket'
+    wsServer = {}
+    clients = []
+    cb = {}
+    timeout = require('connect-timeout')
+
+    app.use(timeout(0))
 
     app.get '/', (req,res)->
         console.log '/'
@@ -67,7 +75,7 @@ export server = (app)->
 
     app.post '/save', (req,res)->
         console.log '/save'
-        #console.log req.body
+        console.log req.body.data
 
         fn = path.join(__dirname, 'data.json')
         err, data <- jsonfile.readFile fn
@@ -81,6 +89,8 @@ export server = (app)->
             console.log 'unable to write json data'
             res.end()
             return
+
+        cb['change'](JSON.stringify(data))
 
         console.log data
 
@@ -102,6 +112,29 @@ export server = (app)->
 
         res.json({htmlString});
 
-    <- app.run
+    app.post '/listen', (req,res)->
+        console.log 'client connected'
+        cid = uuid()
+        req.connection.on 'disconnect', ->
+            delete clients[cid]
+        clients[cid] = { req: req, res: res }
+
+    cb['change'] = (data)->
+        console.log "send data to client"
+        for cl in Object.entries(clients)
+            cl[1].res.write(data)
+
+    err, httpServer <- app.run
+
+    #wsServer = new websocket.server do
+    #    httpServer: httpServer
+    #    autoAcceptConnections: false
+    
+    #wsServer.on 'request', (req)->
+    #    con = request.accept('echo-protocol', request.origin)
+    #    #con.on 'message', (msg)->
+            
+    #    #con.on 'close', (msg)->
+    
     console.log 'server running'
 
