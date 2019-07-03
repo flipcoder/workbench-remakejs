@@ -20,7 +20,7 @@ export views =
         html
             head
             body
-                div.app(data-o-save-deep="defaultSave" data-o-type="object")
+                div.app(data-o-save-deep="defaultSave" data-id=id data-timestamp=timestamp data-o-type="object")
                     h1 Notes
                     button(data-i-new="note .notes") New
                     div.notes(data-o-key="notes" data-o-type="list")
@@ -83,13 +83,25 @@ export server = (app)->
             console.log 'unable to load json data'
             res.end()
             return
+        client_ts = req.body['timestamp']
+        if client_ts
+            if client_ts < data['timestamp'] # server ts is more current?
+                res.write('!') # force client to repull
+                res.end()
         data = deepExtend data, req.body.data
+
+        data['timestamp'] = Date.now()
         err <- jsonfile.writeFile fn, data, {spaces:4}
         if err
             console.log 'unable to write json data'
             res.end()
             return
 
+        # TODO: look through data, trigger change listeners for IDs?
+
+        # TODO: it the structure of the data has changed, restructure
+
+        # trigger notification of change to listening clients
         cb['change'](JSON.stringify(data))
 
         console.log data
@@ -119,10 +131,16 @@ export server = (app)->
             delete clients[cid]
         clients[cid] = { req: req, res: res }
 
+    # change callback
     cb['change'] = (data)->
         console.log "send data to client"
+        str = pug.renderFile path.join(__dirname,'views/index.pug'), do
+            data: JSON.parse(data)
+        
+        console.log str
+        
         for cl in Object.entries(clients)
-            cl[1].res.write(data)
+            cl[1].res.write str
 
     err, httpServer <- app.run
 

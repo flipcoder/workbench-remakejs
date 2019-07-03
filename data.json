@@ -1,16 +1,19 @@
 {
+    "id": "123",
     "notes": [
         {
             "text": "New Note",
-            "id": "0a7449f7-d640-4118-83e8-63e2f21b7756"
+            "id": "77087506-b5ce-4d50-9efa-16c08ab1f70f"
         },
         {
             "text": "New Note",
-            "id": "d93e76f2-0455-4513-beef-c3c75ad89e92"
+            "id": "43ff4e07-255b-4013-af6d-208326774b2b"
         },
         {
             "text": "New Note",
-            "id": "5de6bce0-7a99-4e06-9296-4bfbc536ba95"
+            "id": "613ffa7e-5b33-414d-a76a-baf1aada487a"
         }
-    ]
+    ],
+    "date": 1562125902618,
+    "timestamp": 1562127007234
 }
