@@ -2,7 +2,6 @@
 
 export config =
     port: 3000
-    stack: 'nothing'
 
 export npm =
     name: 'todo'
