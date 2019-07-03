@@ -88,6 +88,8 @@ export server = (app)->
             if client_ts < data['timestamp'] # server ts is more current?
                 res.write('!') # force client to repull
                 res.end()
+                return
+
         data = deepExtend data, req.body.data
 
         data['timestamp'] = Date.now()
