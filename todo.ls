@@ -102,7 +102,7 @@ export server = (app)->
         # TODO: it the structure of the data has changed, restructure
 
         # trigger notification of change to listening clients
-        cb['change'](JSON.stringify(data))
+        cb['change'](data)
 
         console.log data
 
@@ -135,7 +135,7 @@ export server = (app)->
     cb['change'] = (data)->
         console.log "send data to client"
         str = pug.renderFile path.join(__dirname,'views/index.pug'), do
-            data: JSON.parse(data)
+            data: data
         
         console.log str
         
