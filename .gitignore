@@ -1,7 +1,10 @@
 node_modules/
-public/css/
-public/index.js
-public/lib/
 Gruntfile.js
 client/index.js
 yarn-error.log
+todo.js
+wrapper.js
+package-lock.json
+package.json
+public/
+views/

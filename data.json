@@ -1,19 +1,6 @@
 {
     "id": "123",
-    "notes": [
-        {
-            "text": "New Note",
-            "id": "77087506-b5ce-4d50-9efa-16c08ab1f70f"
-        },
-        {
-            "text": "New Note",
-            "id": "43ff4e07-255b-4013-af6d-208326774b2b"
-        },
-        {
-            "text": "New Note",
-            "id": "613ffa7e-5b33-414d-a76a-baf1aada487a"
-        }
-    ],
+    "notes": [],
     "date": 1562125902618,
-    "timestamp": 1562127007234
+    "timestamp": 1562174159367
 }

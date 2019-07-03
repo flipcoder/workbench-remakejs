@@ -2,7 +2,8 @@
 
 export config =
     port: 3000
-    base: 'default'
+    stack: 'nothing'
+
 export npm =
     name: 'todo'
     dependencies:
@@ -51,7 +52,7 @@ export server = (app)->
     pug = require 'pug'
     uuid = require 'uuid/v4'
     #websocket = require 'websocket'
-    wsServer = {}
+    #wsServer = {}
     clients = []
     cb = {}
     timeout = require('connect-timeout')
