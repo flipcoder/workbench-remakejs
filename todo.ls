@@ -21,7 +21,8 @@ export views =
         html
             head
             body
-                div.app(data-o-save-deep="defaultSave" data-o-type="object")
+                - var idsave = "id:" + id;
+                div.app(data-o-save-deep=idsave data-o-key-id=id data-o-type="object")
                     h1 Notes
                     button(data-i-new="note .notes") New
                     div.notes(data-o-key="notes" data-o-type="list")
@@ -93,7 +94,6 @@ export server = (app)->
         console.log 'req.body.path: ', req.body.path
         console.log 'req.body.saveToId: ', req.body.saveToId
         console.log 'req.body.data: ', req.body.data
-        console.log req.body.data
         savePath = req.body.path
         saveToId = req.body.saveToId
 
@@ -139,9 +139,9 @@ export server = (app)->
         # TODO: it the structure of the data has changed, restructure
 
         # trigger notification of change to listening clients
-        cb['change'](data)
+        cb.change(data)
 
-        console.log data
+        console.log 'data: ', data
 
         res.json do
             data: data
@@ -154,7 +154,7 @@ export server = (app)->
         partialPath = path.join(__dirname, "views/" + templateName + ".pug")
         def = {}
         def[templateName] = defaults[templateName]
-        def[templateName]['id'] = uuid()
+        def[templateName].id = uuid()
         console.log def
         htmlString = pug.renderFile partialPath, def
         #console.log htmlString
@@ -169,8 +169,8 @@ export server = (app)->
         clients[cid] = { req: req, res: res }
 
     # change callback
-    cb['change'] = (data)->
-        if clients
+    cb.change = (data)->
+        if clients and clients.length > 0
             console.log "send data to client"
             str = pug.renderFile path.join(__dirname,'views/index.pug'), do
                 data: data
