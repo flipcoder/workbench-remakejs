@@ -11,6 +11,7 @@ export npm =
         remakejs: '*'
         livescript: '*'
         uuid: '*'
+        lodash: '*'
         'connect-timeout': '*'
         'deep-extend': '*'
 
@@ -20,7 +21,7 @@ export views =
         html
             head
             body
-                div.app(data-o-save-deep="defaultSave" data-id=id data-timestamp=timestamp data-o-type="object")
+                div.app(data-o-save-deep="defaultSave" data-o-type="object")
                     h1 Notes
                     button(data-i-new="note .notes") New
                     div.notes(data-o-key="notes" data-o-type="list")
@@ -30,7 +31,7 @@ export views =
                 script(src="client.js")
     ''',
     'note.pug': '''
-        div.note(data-i-editable-with-remove="text(text-single-line)" data-o-type="object" data-o-key-text=note.text data-id=note.id data-w-key-text="innerText")
+        div.note(data-i-editable-with-remove="text(text-single-line)" data-o-key-id=note.id data-o-type="object" data-o-key-text=note.text data-w-key-text="innerText")
             | #{note.text}
     '''
 
@@ -55,8 +56,22 @@ export server = (app)->
     clients = []
     cb = {}
     timeout = require('connect-timeout')
+    _ = require('lodash')
 
     app.use(timeout(0))
+
+    getItemWithId = (data, id)->
+        if _.isObject(data)
+            if data.id == id
+                return data
+            for k,d of data
+                r = getItemWithId(d, id)
+                return r if r
+        else if _.isArray(data)
+            for k,d of data
+                r = getItemWithId(d, id)
+                return r if r
+        return void
 
     app.get '/', (req,res)->
         console.log '/'
@@ -75,7 +90,12 @@ export server = (app)->
 
     app.post '/save', (req,res)->
         console.log '/save'
+        console.log 'req.body.path: ', req.body.path
+        console.log 'req.body.saveToId: ', req.body.saveToId
+        console.log 'req.body.data: ', req.body.data
         console.log req.body.data
+        savePath = req.body.path
+        saveToId = req.body.saveToId
 
         fn = path.join(__dirname, 'data.json')
         err, data <- jsonfile.readFile fn
@@ -83,16 +103,31 @@ export server = (app)->
             console.log 'unable to load json data'
             res.end()
             return
-        client_ts = req.body['timestamp']
-        if client_ts
-            if client_ts < data['timestamp'] # server ts is more current?
-                res.write('!') # force client to repull
-                res.end()
-                return
+        #client_ts = req.body['timestamp']
+        #if client_ts
+        #    if client_ts < data['timestamp'] # server ts is more current?
+        #        res.write('!') # force client to repull
+        #        res.end()
+        #        return
+
+        if savePath
+            dataAtPath = _.get data, savePath
+            if _.isObject
+                deepExtend dataAtPath, req.body.data
+            else
+                _.set data, savePath, req.body.data
+        else if saveToId
+            itemData = getItemWithId data, saveToId
+            deepExtend itemData, req.body.data
+        else
+            if Array.isArray data
+                data = req.body.data
+            else
+                deepExtend data, req.body.data
 
         data = deepExtend data, req.body.data
 
-        data['timestamp'] = Date.now()
+        #data['timestamp'] = Date.now()
         err <- jsonfile.writeFile fn, data, {spaces:4}
         if err
             console.log 'unable to write json data'
@@ -135,14 +170,15 @@ export server = (app)->
 
     # change callback
     cb['change'] = (data)->
-        console.log "send data to client"
-        str = pug.renderFile path.join(__dirname,'views/index.pug'), do
-            data: data
-        
-        console.log str
-        
-        for cl in Object.entries(clients)
-            cl[1].res.write str
+        if clients
+            console.log "send data to client"
+            str = pug.renderFile path.join(__dirname,'views/index.pug'), do
+                data: data
+            
+            console.log str
+            
+            for cl in Object.entries(clients)
+                cl[1].res.write str
 
     err, httpServer <- app.run
 
