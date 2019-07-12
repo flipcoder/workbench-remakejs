@@ -125,7 +125,7 @@ export server = (app)->
             else
                 deepExtend data, req.body.data
 
-        data = deepExtend data, req.body.data
+        #data = deepExtend data, req.body.data
 
         #data['timestamp'] = Date.now()
         err <- jsonfile.writeFile fn, data, {spaces:4}

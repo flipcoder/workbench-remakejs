@@ -1,17 +1,5 @@
 {
     "id": "123",
     "notes": [
-        {
-            "id": "fa628eb2-8b52-460d-bd48-298e86f4efcd",
-            "text": "foo"
-        },
-        {
-            "id": "546c0aab-cff7-4661-b506-67c3863547d8",
-            "text": "bar"
-        },
-        {
-            "id": "ea1d9539-181c-4e90-af44-4fc8d5f48f0b",
-            "text": "baz"
-        }
     ]
 }
