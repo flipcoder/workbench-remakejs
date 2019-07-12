@@ -21,7 +21,7 @@ export views =
         html
             head
             body
-                - var idsave = "id:" + id;
+                - var idsave = "id:" + data.id;
                 div.app(data-o-save-deep=idsave data-o-key-id=id data-o-type="object")
                     h1 Notes
                     button(data-i-new="note .notes") New
