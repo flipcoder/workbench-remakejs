@@ -8,3 +8,5 @@ package-lock.json
 package.json
 public/
 views/
+client-pre-babel.js
+client-pre-browserify.js
